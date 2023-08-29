@@ -1,4 +1,4 @@
-# Front para Ecommerce con Next.js
+# Ecommerce con Next.js 🛍️
 
 Este es un proyecto de [Next.js](https://nextjs.org/) creado con [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -10,7 +10,7 @@ Ejemplo:
 
 `MONGO_URL_DEV=`mongodb://localhost:27017/name-database
 
-## Getting Started
+## Getting Started 🏁
 
 - Conexion con base de datos mediante docker:
 

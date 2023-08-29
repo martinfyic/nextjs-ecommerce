@@ -2,10 +2,17 @@ import { NextPage } from 'next';
 import { Typography } from '@mui/material';
 
 import { ShopLayout } from '@/components/layouts';
-import { initialData } from '../database/products';
 import { ProductList } from '@/components/products';
+import { useProducts } from '@/hooks';
+import { FullScreenLoading } from '@/components/ui';
+
+const URL = 'api/v1/products';
 
 const HomePage: NextPage = () => {
+	const { data, error, isLoading } = useProducts(URL);
+
+	if (error) return <div>failed to load</div>;
+
 	return (
 		<ShopLayout
 			title='Ecommerce NextJS'
@@ -24,7 +31,11 @@ const HomePage: NextPage = () => {
 				All our products
 			</Typography>
 
-			<ProductList products={initialData.products as any} />
+			{isLoading ? (
+				<FullScreenLoading />
+			) : (
+				<ProductList products={data.products} />
+			)}
 		</ShopLayout>
 	);
 };
