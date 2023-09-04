@@ -45,7 +45,7 @@ export const ProductCard: FC<Props> = ({ prod }) => {
 			<Card>
 				<Link
 					component={NextLink}
-					href='/product/slug'
+					href={`/product/${prod.slug}`}
 					passHref
 					prefetch={false}
 				>
