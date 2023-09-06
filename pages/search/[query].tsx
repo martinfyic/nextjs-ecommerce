@@ -28,6 +28,7 @@ const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
 				<Typography
 					variant='h2'
 					sx={{ mb: 1 }}
+					textTransform='capitalize'
 				>
 					Term search: {query}
 				</Typography>
