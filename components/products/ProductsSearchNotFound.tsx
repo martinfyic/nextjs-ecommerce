@@ -18,6 +18,7 @@ export const ProductsSearchNotFound: FC<Prop> = ({ query }) => {
 				variant='h2'
 				sx={{ ml: 1 }}
 				color='secondary'
+				textTransform='capitalize'
 			>
 				{query}
 			</Typography>
