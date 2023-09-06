@@ -1,6 +1,6 @@
-import { IProduct } from '@/interfaces';
 import { db } from './';
 import { Product } from '@/models';
+import { IProduct } from '@/interfaces';
 
 export const getProductBySlug = async (
 	slug: string
@@ -39,6 +39,14 @@ export const getProductByTerm = async (
 	const products = await Product.find(query)
 		.select('title images price inStock slug -_id')
 		.lean();
+	await db.disconnect();
+
+	return JSON.parse(JSON.stringify(products));
+};
+
+export const getAllProducts = async (): Promise<IProduct[]> => {
+	await db.connect();
+	const products = await Product.find().lean();
 	await db.disconnect();
 
 	return JSON.parse(JSON.stringify(products));
