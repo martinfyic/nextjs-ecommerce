@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
@@ -5,7 +6,7 @@ import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { ShopLayout } from '@/components/layouts';
 import { ItemCounter } from '@/components/ui';
 import { ProductSizeSelector, ProductSlideshow } from '@/components/products';
-import { IProduct } from '@/interfaces';
+import { ICartProduct, IProduct, ISize } from '@/interfaces';
 import { dbProducts } from '@/database';
 
 interface Props {
@@ -13,6 +14,24 @@ interface Props {
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
+	const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
+		_id: product._id,
+		image: product.images[0],
+		price: product.price,
+		size: undefined,
+		slug: product.slug,
+		title: product.title,
+		gender: product.gender,
+		quantity: 1,
+	});
+
+	const onSelectedSize = (size: ISize) => {
+		setTempCartProduct(currentProduct => ({
+			...currentProduct,
+			size,
+		}));
+	};
+
 	return (
 		<ShopLayout
 			title={product.title}
@@ -57,21 +76,29 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 						<Box sx={{ my: 2 }}>
 							<Typography variant='subtitle2'>Quantity</Typography>
 							<ItemCounter />
-							<ProductSizeSelector sizes={product.sizes} />
+							<ProductSizeSelector
+								sizes={product.sizes}
+								selectedSize={tempCartProduct.size}
+								onSelectedSize={onSelectedSize}
+							/>
 						</Box>
 
 						{/* add to cart */}
-						<Button
-							color='secondary'
-							className='circular-btn'
-						>
-							Add to Cart
-						</Button>
-						{/* <Chip
-							label='No available'
-							color='error'
-							variant='outlined'
-						/> */}
+						{product.inStock > 0 ? (
+							<Button
+								color='secondary'
+								className='circular-btn'
+								disabled={!tempCartProduct.size}
+							>
+								{tempCartProduct.size ? 'Add to Cart' : 'Select a size'}
+							</Button>
+						) : (
+							<Chip
+								label='No available'
+								color='primary'
+								variant='outlined'
+							/>
+						)}
 
 						{/* description */}
 						<Box sx={{ mt: 3 }}>
