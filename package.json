@@ -1,34 +1,53 @@
 {
-  "name": "nextjs-ecommerce",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@emotion/react": "11.11.1",
-    "@emotion/styled": "11.11.0",
-    "@mui/icons-material": "^5.14.3",
-    "@mui/material": "5.14.5",
-    "@mui/x-data-grid": "6.11.2",
-    "@types/node": "20.5.1",
-    "@types/react": "18.2.20",
-    "@types/react-dom": "18.2.7",
-    "eslint": "8.47.0",
-    "eslint-config-next": "13.4.19",
-    "js-cookie": "3.0.5",
-    "mongoose": "7.4.5",
-    "next": "13.4.19",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-slideshow-image": "4.2.1",
-    "swr": "2.2.2",
-    "typescript": "5.1.6"
-  },
-  "devDependencies": {
-    "@types/js-cookie": "3.0.4"
-  }
+	"name": "nextjs-ecommerce",
+	"version": "0.1.0",
+	"private": true,
+	"author": {
+		"name": "Martin Ferreira Yic",
+		"email": "martin.f.yic@gmail.com",
+		"url": "https://www.linkedin.com/in/martin-ferreira-yic/"
+	},
+	"keywords": [
+		"nextjs",
+		"react",
+		"reactjs",
+		"ecommerce",
+		"mongoose"
+	],
+	"engines": {
+		"node": "16.x"
+	},
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/martinfyic/nextjs-ecommerce.git"
+	},
+	"dependencies": {
+		"js-cookie": "3.0.5",
+		"mongoose": "7.5.2",
+		"next": "13.5.2",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"react-slideshow-image": "4.2.1",
+		"swr": "2.2.2"
+	},
+	"devDependencies": {
+		"@emotion/react": "11.11.1",
+		"@emotion/styled": "11.11.0",
+		"@mui/icons-material": "^5.14.9",
+		"@mui/material": "5.14.10",
+		"@types/js-cookie": "3.0.4",
+		"@mui/x-data-grid": "6.15.0",
+		"@types/node": "20.6.3",
+		"@types/react": "18.2.22",
+		"@types/react-dom": "18.2.7",
+		"eslint": "8.49.0",
+		"eslint-config-next": "13.5.2",
+		"typescript": "5.2.2"
+	}
 }
