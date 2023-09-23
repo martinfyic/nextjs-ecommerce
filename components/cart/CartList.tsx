@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import NextLink from 'next/link';
+
 import {
 	Box,
 	CardActionArea,
@@ -11,29 +12,38 @@ import {
 } from '@mui/material';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
-import { initialData } from '@/database/products';
+import { CartContext } from '@/context';
+import { ICartProduct } from '@/interfaces';
 import { ItemCounter } from '../ui';
-
-// ! Mock Data, delete after develop //
-const productsInCart = [
-	initialData.products[0],
-	initialData.products[1],
-	initialData.products[2],
-];
-// ! ------------------------------ //
+import { currency } from '@/utils';
 
 interface Props {
 	editable?: boolean;
 }
 
 export const CartList: FC<Props> = ({ editable = false }) => {
+	const { cart, updateCartQuantity, removeCartProduct } =
+		useContext(CartContext);
+
+	const onNewCartQuantity = (
+		product: ICartProduct,
+		newQuantityValue: number
+	) => {
+		product.quantity = newQuantityValue;
+		updateCartQuantity(product);
+	};
+
+	const onCartRemove = (product: ICartProduct) => {
+		removeCartProduct(product);
+	};
+
 	return (
 		<>
-			{productsInCart.map(product => (
+			{cart.map(product => (
 				<Grid
 					container
 					spacing={2}
-					key={product.slug}
+					key={product.slug + product.size}
 					sx={{ my: 1 }}
 				>
 					<Grid
@@ -42,12 +52,12 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 					>
 						<Link
 							component={NextLink}
-							href='/product/slug'
+							href={`/product/${product.slug}`}
 							passHref
 						>
 							<CardActionArea>
 								<CardMedia
-									image={`/products/${product.images[0]}`}
+									image={`/products/${product.image}`}
 									component='img'
 									sx={{ borderRadius: '5px' }}
 									alt={product.title}
@@ -65,17 +75,22 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 						>
 							<Typography variant='body1'>{product.title}</Typography>
 							<Typography variant='body1'>
-								Size: <strong>M</strong>
+								Size: <strong>{product.size}</strong>
 							</Typography>
 
 							{editable ? (
-								<ItemCounter />
+								<ItemCounter
+									currentValue={product.quantity}
+									updateQuantity={value => onNewCartQuantity(product, value)}
+									maxValue={8}
+								/>
 							) : (
 								<Typography
 									sx={{ mt: 2 }}
 									variant='h5'
 								>
-									3 items
+									{product.quantity}{' '}
+									{product.quantity > 1 ? 'Products' : 'Product'}
 								</Typography>
 							)}
 						</Box>
@@ -86,12 +101,16 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 						display='flex'
 						alignItems='center'
 						flexDirection='column'
-						justifyContent='space-between'
 					>
-						<Typography variant='subtitle1'>${product.price}</Typography>
+						<Typography
+							variant='subtitle1'
+							marginBottom={4}
+						>
+							{currency.format(product.price)}
+						</Typography>
 						{/* Editable */}
 						{editable && (
-							<IconButton>
+							<IconButton onClick={() => onCartRemove(product)}>
 								<DeleteOutlineOutlinedIcon titleAccess='Delete product' />
 							</IconButton>
 						)}
