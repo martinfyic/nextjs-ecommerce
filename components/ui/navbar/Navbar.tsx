@@ -18,7 +18,7 @@ import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { ClearOutlined } from '@mui/icons-material';
 
-import { UiContext } from '@/context';
+import { UiContext, CartContext } from '@/context';
 
 export const Navbar = () => {
 	const { asPath, push } = useRouter();
@@ -26,6 +26,7 @@ export const Navbar = () => {
 	const [isSearch, setIsSearch] = useState(false);
 
 	const { toggleSideMenu } = useContext(UiContext);
+	const { order } = useContext(CartContext);
 
 	const searcProduct = (
 		e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -133,7 +134,9 @@ export const Navbar = () => {
 				>
 					<IconButton>
 						<Badge
-							badgeContent={2}
+							badgeContent={
+								order.numberOfItems > 9 ? '+9' : order.numberOfItems
+							}
 							color='secondary'
 						>
 							<ShoppingCartOutlinedIcon />

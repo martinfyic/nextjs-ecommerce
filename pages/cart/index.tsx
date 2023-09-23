@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import {
 	Box,
 	Button,
@@ -9,13 +9,15 @@ import {
 	Typography,
 } from '@mui/material';
 
+import { CartContext } from '@/context';
 import { CartList, CartOrderSumary } from '@/components/cart';
 import { ShopLayout } from '@/components/layouts';
 
 const CartPage: FC = () => {
+	const { order } = useContext(CartContext);
 	return (
 		<ShopLayout
-			title={`Shopping Cart - ${3} 📦`}
+			title={`Shopping Cart - ${order.numberOfItems} 📦`}
 			pageDescription='Store shopping cart'
 		>
 			<Typography
