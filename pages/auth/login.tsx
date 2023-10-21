@@ -1,10 +1,23 @@
 import { NextPage } from 'next';
 import NextLink from 'next/link';
+
 import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { useForm } from 'react-hook-form';
 
 import { AuthLayout } from '@/components/layouts';
 
-const loginPage: NextPage = () => {
+type FormData = {
+	email: string;
+	password: string;
+};
+
+const LoginPage: NextPage = () => {
+	const {
+		register,
+		handleSubmit,
+		watch,
+		formState: { errors },
+	} = useForm<FormData>();
 	return (
 		<AuthLayout
 			title='Login'
@@ -84,4 +97,4 @@ const loginPage: NextPage = () => {
 		</AuthLayout>
 	);
 };
-export default loginPage;
+export default LoginPage;
