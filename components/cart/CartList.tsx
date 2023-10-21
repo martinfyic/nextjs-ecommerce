@@ -15,7 +15,6 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { CartContext } from '@/context';
 import { ICartProduct } from '@/interfaces';
 import { ItemCounter } from '../ui';
-import { currency } from '@/utils';
 
 interface Props {
 	editable?: boolean;
@@ -105,8 +104,9 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 						<Typography
 							variant='subtitle1'
 							marginBottom={4}
+							marginRight={4}
 						>
-							{currency.format(product.price)}
+							${product.price}
 						</Typography>
 						{/* Editable */}
 						{editable && (
