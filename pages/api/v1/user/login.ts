@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 
 import { db } from '@/database';
 import { User } from '@/models';
+import { jwt } from '@/utils';
 
 type Data =
 	| { message: string }
@@ -49,10 +50,12 @@ const loginUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 		return res.status(400).json({ message: 'Email or password not valid' });
 	}
 
-	const { role, name } = user;
+	const { role, name, _id } = user;
+
+	const token = jwt.singToken(_id, email);
 
 	return res.status(200).json({
-		token: '',
+		token,
 		user: {
 			email,
 			role,
