@@ -34,6 +34,8 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 	}, []);
 
 	const checkToken = async () => {
+		if (!Cookies.get('token')) return;
+
 		try {
 			const { data } = await ecommerApi.get('/user/validate-token');
 			const { token, user } = data;
