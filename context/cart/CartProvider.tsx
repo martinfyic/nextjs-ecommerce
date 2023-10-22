@@ -74,7 +74,6 @@ export const CartProvider: FC<Props> = ({ children }) => {
 		};
 
 		dispatch({ type: '[Cart] - Update order summary', payload: orderSumary });
-		console.log(orderSumary);
 	}, [state.cart]);
 
 	const addProductToCart = (product: ICartProduct) => {
