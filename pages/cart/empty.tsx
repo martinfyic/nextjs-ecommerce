@@ -32,7 +32,7 @@ const EmptyPage: NextPage = () => {
 						typography='h4'
 						color='secondary'
 					>
-						Go back
+						Go back to store
 					</Link>
 				</Box>
 			</Box>

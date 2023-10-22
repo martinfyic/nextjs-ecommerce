@@ -5,11 +5,13 @@ import { CartContext, cartReducer } from './';
 import { ICartProduct, IOrderSummary } from '../../interfaces';
 
 export interface CartState {
+	isLoaded: boolean;
 	cart: ICartProduct[];
 	order: IOrderSummary;
 }
 
 const CART_INITIAL_STATE: CartState = {
+	isLoaded: false,
 	cart: [],
 	order: {
 		numberOfItems: 0,
