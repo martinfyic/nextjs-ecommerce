@@ -50,7 +50,8 @@ const RegisterPage: NextPage = () => {
 			return;
 		}
 
-		router.replace('/');
+		const destination = router.query.p?.toString() || '/';
+		router.replace(destination);
 	};
 
 	return (
@@ -165,7 +166,11 @@ const RegisterPage: NextPage = () => {
 						>
 							<Link
 								component={NextLink}
-								href='/auth/login'
+								href={
+									router.query.p
+										? `/auth/login?p=${router.query.p}`
+										: '/auth/login'
+								}
 								passHref
 								underline='always'
 							>

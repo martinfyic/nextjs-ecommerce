@@ -1,4 +1,6 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
+
 import {
 	Box,
 	Button,
@@ -14,7 +16,19 @@ import { CartList, CartOrderSumary } from '@/components/cart';
 import { ShopLayout } from '@/components/layouts';
 
 const CartPage: FC = () => {
-	const { order } = useContext(CartContext);
+	const { order, isLoaded, cart } = useContext(CartContext);
+	const router = useRouter();
+
+	useEffect(() => {
+		if (isLoaded && cart.length === 0) {
+			router.replace('/cart/empty');
+		}
+	}, [isLoaded, cart, router]);
+
+	if (!isLoaded || cart.length === 0) {
+		return <></>;
+	}
+
 	return (
 		<ShopLayout
 			title={`Shopping Cart - ${order.numberOfItems} 📦`}
@@ -58,6 +72,7 @@ const CartPage: FC = () => {
 									color='secondary'
 									className='circular-btn'
 									fullWidth
+									href='/checkout/address'
 								>
 									Checkout
 								</Button>

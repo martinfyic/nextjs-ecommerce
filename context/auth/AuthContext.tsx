@@ -12,6 +12,7 @@ interface ContextProps {
 		email: string,
 		password: string
 	) => Promise<IAuthRegister>;
+	logoutUser: () => void;
 }
 
 export const AuthContext: Context<ContextProps> = createContext(
