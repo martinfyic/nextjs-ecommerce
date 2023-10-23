@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 
 import {
 	Box,
@@ -12,7 +12,18 @@ import {
 } from '@mui/material';
 
 import { ShopLayout } from '@/components/layouts';
-// import { jwt } from '@/utils';
+import { countries } from '@/utils';
+
+type FormData = {
+	firstName: string;
+	lastName: string;
+	address: string;
+	address2?: string;
+	zip: string;
+	city: string;
+	country: string;
+	phone: string;
+};
 
 const AddressPage: NextPage = () => {
 	return (
@@ -113,12 +124,16 @@ const AddressPage: NextPage = () => {
 						<Select
 							variant='filled'
 							label='Country'
-							value={4}
+							value='URY'
 						>
-							<MenuItem value={1}>Argentina</MenuItem>
-							<MenuItem value={2}>Brasil</MenuItem>
-							<MenuItem value={3}>Chile</MenuItem>
-							<MenuItem value={4}>Uruguay</MenuItem>
+							{countries.map(country => (
+								<MenuItem
+									key={country.code}
+									value={country.code}
+								>
+									{country.name}
+								</MenuItem>
+							))}
 						</Select>
 					</FormControl>
 				</Grid>
@@ -153,32 +168,4 @@ const AddressPage: NextPage = () => {
 	);
 };
 
-/*
-
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-	const { token = '' } = req.cookies;
-	let isValidToken = false;
-
-	try {
-		await jwt.isValidToken(token);
-		isValidToken = true;
-	} catch (error) {
-		isValidToken = false;
-	}
-
-	if (!isValidToken) {
-		return {
-			redirect: {
-				destination: '/auth/login?p=/checkout/address',
-				permanent: false,
-			},
-		};
-	}
-
-	return {
-		props: {},
-	};
-};
-
-*/
 export default AddressPage;
