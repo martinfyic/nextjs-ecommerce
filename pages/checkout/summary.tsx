@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import NextLink from 'next/link';
 import {
 	Box,
@@ -11,10 +11,25 @@ import {
 	Typography,
 } from '@mui/material';
 
+import { CartContext } from '@/context';
 import { CartList, CartOrderSumary } from '@/components/cart';
 import { ShopLayout } from '@/components/layouts';
+import { countries } from '@/utils';
 
 const SummaryPage: FC = () => {
+	const { shippingAddress } = useContext(CartContext);
+	if (!shippingAddress) return <></>;
+	const {
+		address,
+		address2 = '',
+		city,
+		country,
+		firstName,
+		lastName,
+		phone,
+		zip,
+	} = shippingAddress;
+
 	return (
 		<ShopLayout
 			title='Purchase Summary'
@@ -69,11 +84,17 @@ const SummaryPage: FC = () => {
 								</Link>
 							</Box>
 
-							<Typography>Martin Ferreira</Typography>
-							<Typography>554 Camino del Vago</Typography>
-							<Typography>Montevideo, Centro</Typography>
-							<Typography>Uruguay</Typography>
-							<Typography>+598 99 756 223</Typography>
+							<Typography>
+								{firstName} {lastName}
+							</Typography>
+							<Typography>addr 1: {address}</Typography>
+							<Typography>{address2 ? `addr 2: ${address2}` : ''}</Typography>
+							<Typography>{city}</Typography>
+							<Typography>{zip}</Typography>
+							<Typography>
+								{countries.find(c => c.code === country)?.name}
+							</Typography>
+							<Typography>{phone}</Typography>
 							<Divider sx={{ my: 1 }} />
 
 							<Box
