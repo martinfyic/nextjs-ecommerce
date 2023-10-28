@@ -1,5 +1,6 @@
 import { FC, ReactNode, useReducer, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -28,25 +29,34 @@ interface Props {
 }
 
 export const AuthProvider: FC<Props> = ({ children }) => {
+	const { data, status } = useSession();
 	const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
 	const router = useRouter();
 
 	useEffect(() => {
-		checkToken();
-	}, []);
-
-	const checkToken = async () => {
-		if (!Cookies.get('token')) return;
-
-		try {
-			const { data } = await ecommerApi.get('/user/validate-token');
-			const { token, user } = data;
-			Cookies.set('token', token);
-			dispatch({ type: '[Auth] - Login', payload: user });
-		} catch (error) {
-			Cookies.remove('token');
+		if (status === 'authenticated') {
+			// TODO: dispatch({type: '[Auth] - Login', payload: data.user as IUser})
+			console.log({ user: data.user });
 		}
-	};
+	}, [status, data?.user]);
+
+	// Custom Auth
+	// useEffect(() => {
+	// 	checkToken();
+	// }, []);
+
+	// const checkToken = async () => {
+	// 	if (!Cookies.get('token')) return;
+
+	// 	try {
+	// 		const { data } = await ecommerApi.get('/user/validate-token');
+	// 		const { token, user } = data;
+	// 		Cookies.set('token', token);
+	// 		dispatch({ type: '[Auth] - Login', payload: user });
+	// 	} catch (error) {
+	// 		Cookies.remove('token');
+	// 	}
+	// };
 
 	const loginUser = async (
 		email: string,
