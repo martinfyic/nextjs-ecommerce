@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
+import { getSession, signIn } from 'next-auth/react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -40,18 +41,21 @@ const RegisterPage: NextPage = () => {
 
 	const onRegisterForm = async ({ email, name, password }: FormData) => {
 		setShowError(false);
-		const resp = await registerUser(name, email, password);
-		if (resp.hasError) {
+		const { hasError, message } = await registerUser(name, email, password);
+		if (hasError) {
 			setShowError(true);
-			setErrorMessage(resp.message || '');
+			setErrorMessage(message || '');
 			setTimeout(() => {
 				setShowError(false);
 			}, 4000);
 			return;
 		}
 
-		const destination = router.query.p?.toString() || '/';
-		router.replace(destination);
+		//CUSTOM Register
+		// const destination = router.query.p?.toString() || '/';
+		// router.replace(destination);
+
+		await signIn('credentials', { email, password });
 	};
 
 	return (
@@ -183,4 +187,26 @@ const RegisterPage: NextPage = () => {
 		</AuthLayout>
 	);
 };
+
+export const getServerSideProps: GetServerSideProps = async ({
+	req,
+	query,
+}) => {
+	const session = await getSession({ req });
+	const { p = '/' } = query;
+
+	if (session) {
+		return {
+			redirect: {
+				destination: p.toString(),
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {},
+	};
+};
+
 export default RegisterPage;
