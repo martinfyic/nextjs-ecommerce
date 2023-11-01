@@ -1,7 +1,8 @@
 import { useState, useContext } from 'react';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+import { getSession, signIn } from 'next-auth/react';
 
 import {
 	Box,
@@ -15,7 +16,7 @@ import {
 import { ErrorOutline } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 
-import { AuthContext } from '@/context';
+// import { AuthContext } from '@/context';
 import { AuthLayout } from '@/components/layouts';
 import { validations } from '@/utils';
 
@@ -26,7 +27,7 @@ type FormData = {
 
 const LoginPage: NextPage = () => {
 	const router = useRouter();
-	const { loginUser } = useContext(AuthContext);
+	// const { loginUser } = useContext(AuthContext);
 
 	const {
 		register,
@@ -39,6 +40,8 @@ const LoginPage: NextPage = () => {
 	const onLoginUser = async ({ email, password }: FormData) => {
 		setShowError(false);
 
+		//CUSTOM LOGIN ----------------------------------------
+		/*
 		const isValidLogin = await loginUser(email, password);
 		if (!isValidLogin) {
 			setShowError(true);
@@ -47,9 +50,12 @@ const LoginPage: NextPage = () => {
 			}, 4000);
 			return;
 		}
-
 		const destination = router.query.p?.toString() || '/';
-		router.replace(destination);
+		router.replace(destination); 
+		*/
+
+		//Next-Auth
+		await signIn('credentials', { email, password });
 	};
 
 	return (
@@ -166,4 +172,26 @@ const LoginPage: NextPage = () => {
 		</AuthLayout>
 	);
 };
+
+export const getServerSideProps: GetServerSideProps = async ({
+	req,
+	query,
+}) => {
+	const session = await getSession({ req });
+	const { p = '/' } = query;
+
+	if (session) {
+		return {
+			redirect: {
+				destination: p.toString(),
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {},
+	};
+};
+
 export default LoginPage;
