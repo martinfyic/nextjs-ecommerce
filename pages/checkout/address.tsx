@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
@@ -38,7 +38,7 @@ const getAddressFromCookies = (): FormData => {
 		address2: Cookies.get('address2') || '',
 		zip: Cookies.get('zip') || '',
 		city: Cookies.get('city') || '',
-		country: Cookies.get('country') || '',
+		country: countries[13].code,
 		phone: Cookies.get('phone') || '',
 	};
 };
@@ -51,9 +51,14 @@ const AddressPage: NextPage = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm<FormData>({
 		defaultValues: getAddressFromCookies(),
 	});
+
+	useEffect(() => {
+		reset();
+	}, [reset]);
 
 	const onSubmitAdress = (data: FormData) => {
 		updateAddress(data);
@@ -198,11 +203,12 @@ const AddressPage: NextPage = () => {
 								select
 								variant='filled'
 								label='Country'
-								defaultValue={Cookies.get('country') || countries[13].code}
+								defaultValue={countries[13].code}
 								{...register('country', {
 									required: 'This field is required',
 								})}
 								error={!!errors.country}
+								helperText={errors.country?.message}
 							>
 								{countries.map(country => (
 									<MenuItem
