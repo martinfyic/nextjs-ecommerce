@@ -1,13 +1,14 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
-import { getSession, signIn } from 'next-auth/react';
+import { getProviders, getSession, signIn } from 'next-auth/react';
 
 import {
 	Box,
 	Button,
 	Chip,
+	Divider,
 	Grid,
 	Link,
 	TextField,
@@ -36,6 +37,14 @@ const LoginPage: NextPage = () => {
 	} = useForm<FormData>();
 
 	const [showError, setShowError] = useState(false);
+
+	const [providers, setProviders] = useState<any>({});
+
+	useEffect(() => {
+		getProviders().then(prov => {
+			setProviders(prov);
+		});
+	}, []);
 
 	const onLoginUser = async ({ email, password }: FormData) => {
 		setShowError(false);
@@ -165,6 +174,33 @@ const LoginPage: NextPage = () => {
 							>
 								Don&rsquo;t have an account?
 							</Link>
+						</Grid>
+
+						<Grid
+							item
+							xs={12}
+							display='flex'
+							justifyContent='end'
+							flexDirection='column'
+						>
+							<Divider sx={{ width: '100%', my: 2 }} />
+
+							{Object.values(providers).map((provider: any) => {
+								if (provider.id === 'credentials')
+									return <div key='credentials'></div>;
+								return (
+									<Button
+										key={provider.id}
+										variant='outlined'
+										fullWidth
+										color='primary'
+										sx={{ mb: 1 }}
+										onClick={() => signIn(provider.id)}
+									>
+										{provider.name}
+									</Button>
+								);
+							})}
 						</Grid>
 					</Grid>
 				</Box>
