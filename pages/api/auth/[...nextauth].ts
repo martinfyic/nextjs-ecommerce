@@ -21,7 +21,6 @@ export const authOptions: NextAuthOptions = {
 				},
 			},
 			async authorize(credentials) {
-				console.log(credentials);
 				return await dbUsers.checkUserEmailPassword(
 					credentials!.email,
 					credentials!.password
@@ -33,6 +32,17 @@ export const authOptions: NextAuthOptions = {
 			clientSecret: process.env.GITHUB_SECRET || '',
 		}),
 	],
+
+	pages: {
+		signIn: '/auth/login',
+		newUser: '/auth/register',
+	},
+
+	session: {
+		maxAge: 2592000, // 30d
+		strategy: 'jwt',
+		updateAge: 86400, // Cada dia se actualiza
+	},
 
 	callbacks: {
 		async jwt({ account, token, user }) {
