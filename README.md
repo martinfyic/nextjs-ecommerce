@@ -6,9 +6,17 @@ Este es un proyecto de [Next.js](https://nextjs.org/) creado con [`create-next-a
 
 Renombrar el archivo [.env.example](.env.example) a `.env`
 
-Ejemplo:
+`MONGO_URL_DEV`=
 
-`MONGO_URL_DEV=`mongodb://localhost:27017/name-database
+`JWT_SECRET`=
+
+`NEXTAUTH_SECRET`=
+
+`NEXT_PUBLIC_TAX_RATE`=
+
+`GITHUB_ID`=
+
+`GITHUB_SECRET`=
 
 ## Getting Started 🏁
 
