@@ -4,9 +4,11 @@ import Cookies from 'js-cookie';
 import { CartContext, cartReducer } from './';
 import {
 	ICartProduct,
+	IOrder,
 	IOrderSummary,
 	IShippingAddress,
 } from '../../interfaces';
+import { ecommerApi } from '@/api';
 
 export interface CartState {
 	isLoaded: boolean;
@@ -156,14 +158,38 @@ export const CartProvider: FC<Props> = ({ children }) => {
 		dispatch({ type: '[Cart] - Update address', payload: address });
 	};
 
+	const createOrder = async () => {
+		if (!state.shippingAddress) {
+			throw new Error('There is no delivery address');
+		}
+
+		const body: IOrder = {
+			orderItems: state.cart.map(prod => ({
+				...prod,
+				size: prod.size!,
+			})),
+			shippingAddress: state.shippingAddress,
+			order: state.order,
+			isPaid: false,
+		};
+
+		try {
+			const { data } = await ecommerApi.post('/orders', body);
+			console.log(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<CartContext.Provider
 			value={{
 				...state,
 				addProductToCart,
+				createOrder,
 				removeCartProduct,
-				updateCartQuantity,
 				updateAddress,
+				updateCartQuantity,
 			}}
 		>
 			{children}
